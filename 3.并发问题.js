@@ -22,7 +22,6 @@ let out = after(2,(arr)=>{
 fs.readFile('./a.txt','UTF8',function (err,data) {
     out(data,0)
 })
-
 fs.readFile('./b.txt','UTF8',function (err,data) {
    out(data,1)
 })
