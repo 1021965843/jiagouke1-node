@@ -55,3 +55,7 @@ console.log(util.isString(123))
 // let sum3 = sum2(2,3)
 // let result = sum3(4);
 // console.log(result)
+
+
+
+// 请求数据  多个接口等待数据返回后 再去渲染页面 
