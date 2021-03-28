@@ -1,7 +1,7 @@
 // promise的特点 解决了什么问题 1.链式调用解决嵌套回调的问题 和 2.同步并发问题 3. 多个异步处理错误问题
 // 1.链式调用解决嵌套回调的问题
 const fs = require('fs'); // 上一个人输出是下一个的输入 
-// let Promise = require('./source/3.promise')
+let Promise = require('./source/3.promise')
 function readFile(filePath,encoding){
     return new Promise((resolve,reject)=>{
         fs.readFile(filePath,encoding,(err,data)=>{ // nodeApi 转化成promise
@@ -19,12 +19,14 @@ let promise2 = new Promise((resolve)=>{
             resolve('ok')
         }, 1000);
     })
+},(err)=>{
+    return 111
 })
 promise2.then(data=>{
     console.log(data)
 },err=>{
     console.log('error',err)
-})
+});
 
 // 分析--------------------------------
 
