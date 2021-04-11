@@ -8,7 +8,7 @@
             "type": "pwa-node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}\\7.stream\\4.writeStream.js"
+            "program": "${workspaceFolder}\\7.stream\\5.pipe.js"
         }
     ]
 }

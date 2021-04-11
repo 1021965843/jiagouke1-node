@@ -2,6 +2,7 @@
  * element 存储的是数据
  * next 存储的是下一个人的指针
  */
+
 class Node {
     constructor(element, next) {
         this.element = element;
@@ -35,6 +36,7 @@ class LinkedList {
         } else {
             // 获取前一个节点
             let prevNode = this._node(index - 1); // 以第二个节点为例 需要找到第一个节点
+            // if(!prevNode) return
             prevNode.next = new Node(element, prevNode.next)
         }
         this.size++;
@@ -45,24 +47,28 @@ class LinkedList {
         let removeNode;
         if (index == 0) {
             removeNode = this.head;
-            this.head = this.head.next;
+            if (removeNode !== null) {
+                this.head = this.head.next;
+                this.size--;
+            }
         } else {
             let prevNode = this._node(index - 1);
             removeNode = prevNode.next;
             prevNode.next = prevNode.next.next;
+            this.size--;
         }
-        this.size--;
+
         return removeNode
     }
 
     reverse1() { // 递归变成循环
-        function r(head){
-            if(head == null || head.next == null){ // 1。空链表 2.只有一个人，就不用转了
+        function r(head) {
+            if (head == null || head.next == null) { // 1。空链表 2.只有一个人，就不用转了
                 return head;
             }
             let newHead = r(head.next); // 先从最底层进行反转，所以这里一直往下找，找到最后一个
             head.next.next = head;
-            head.next = null ;
+            head.next = null;
             return newHead;
         }
         this.head = r(this.head); // 补充了一句 改了头
@@ -73,25 +79,26 @@ class LinkedList {
         // head.next = null // 把老头的next 作为null
         // return newHead //返回新头
     }
-    reverse(){
+    reverse() {
         let head = this.head;
-        if(head == null || head.next == null) return head;
+        if (head == null || head.next == null) return head;
         let newHead = null; // 创建了一个空链表，将以前的链表拷贝过来了
         while (head !== null) { // 如果不是null 我就一直搬家
             let temp = head.next; // 保留2
-            head.next = newHead// 让1 变为null
-            newHead = head;// 让这个新链表的头 等于老链表的头
+            head.next = newHead // 让1 变为null
+            newHead = head; // 让这个新链表的头 等于老链表的头
             head = temp; // 把老的指向2
         }
         this.head = newHead;
         return newHead
     }
 }
-let ll = new LinkedList();
-ll.add(1);
-ll.add(2);
-ll.add(3);
-ll.add(4);
+module.exports = LinkedList
+// let ll = new LinkedList();
+// ll.add(1);
+// ll.add(2);
+// ll.add(3);
+// ll.add(4);
 // console.dir(ll.reverse(),{depth:100});
 
 // 链表的反转如何实现

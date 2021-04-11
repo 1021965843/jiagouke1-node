@@ -2,17 +2,15 @@ const fs = require('fs');
 const path = require('path');
 const WriteStream = require('./WriteStream')
 const ws = new WriteStream(path.resolve(__dirname, '../a.txt'), {
-    highWaterMark: 100
+    highWaterMark:6
 });
 
 // 10个数 希望使用3个字节内存来处理 
-
 let i = 0; // 写入0-9个
 function write() {
     let flag = true;
     while (i < 10 && flag) {
         flag = ws.write(i++ + '');
-        console.log(flag)
     }
 }
 ws.on('drain',function () { // 只有当我们写入的数据达到了预期，并且数据被清空后才会触发drain时间
@@ -21,7 +19,6 @@ ws.on('drain',function () { // 只有当我们写入的数据达到了预期，�
 })
 
 write(); // 执行写入操作
-
 
 
 // 1. new WriteStream()
