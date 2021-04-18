@@ -1,6 +1,5 @@
 // http是node内置模块 可以直接来使用
 
-
 const http = require('http');
 const url = require('url');
 // request (获取请求的信息) -> response (给浏览器写数据使用response)
