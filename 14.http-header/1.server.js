@@ -5,6 +5,22 @@ const fs = require('fs');
 const mime = require('mime');
 const querystring = require('querystring'); // json.parse  json.stringify
 
+Buffer.prototype.split = function (sep) {
+    let len = Buffer.from(sep).length; // 强制将字符串转化成buffer
+    let offset = 0;
+    let current;
+    
+    let arr = [];
+    while (-1 !== (current = this.indexOf(sep,offset))) {
+        arr.push( this.slice(offset,current))
+        offset = current + len
+    }
+
+    arr.push()
+   
+    
+}
+
 const server = http.createServer((req, res) => {
     let { pathname, query } = url.parse(req.url, true);
 
@@ -54,8 +70,9 @@ const server = http.createServer((req, res) => {
                 // {username:"123"}  username=123&password=456  a=1; b=2
                 let r = querystring.parse(buf.toString(),'&','='); // 可以将查询字符串 转化成对象
                 res.end(JSON.stringify(r));
-            }else{
-                console.log(buf.toString())
+            }else if(req.headers['content-type'].includes('multipart/form-data')){
+                let boundary ="--" +  req.headers['content-type'].split('=')[1];
+                buf.split(boundary)
             }
         })
     } else {
