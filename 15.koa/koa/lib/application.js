@@ -4,7 +4,7 @@ const request = require('./request');
 const response = require('./response');
 
 class Application {
-    constructor(){
+    constructor() {
         this.context = Object.create(context); //  实现每次创建一个应用都有自己的全新上下文
         this.request = Object.create(request);
         this.response = Object.create(response);
@@ -17,9 +17,16 @@ class Application {
         let ctx = Object.create(this.context); // 这个目的是为了每次请求的时候 都拥有自己的上下文，而且自己的上下文是可以获取公共上下文声明的变量、属性
         let request = Object.create(this.request);
         let response = Object.create(this.response);
+
+
+        ctx.request = request; // 上下文中包含着request
+        ctx.req = ctx.request.req = req; // 默认上下文中包含着 原生的req
+
+
+        return ctx;
     }
     handleRequest = (req, res) => { // 每次请求都会执行此方法
-        let ctx = createContext(req, res)
+        let ctx = this.createContext(req, res)
         this.fn(ctx);
     }
     listen(...args) {
