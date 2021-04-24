@@ -8,19 +8,19 @@ const app = new Koa();
 // 我们可以使用 await 也可以使用 return 因为都可以达到等待下一个promise执行完毕
 app.use(async (ctx, next) => { // 都会把最外层的函数全部执行完毕
     console.log(1);
-   // ctx.body = 'hello' //ctx.body = hello
-     next();  // ctx.body = 'world';
+    // ctx.body = 'hello' //ctx.body = hello
+    return next(); // ctx.body = 'world';
     console.log(2);
 })
 app.use(async (ctx, next) => {
     console.log(3);
-    await new Promise((resolve,reject)=>{
+    await new Promise((resolve, reject) => {
         setTimeout(() => {
             console.log('sleep');
             resolve();
         }, 1000);
     })
-     next();
+    await next();
     //ctx.body = 'world';
     console.log(4);
 })
