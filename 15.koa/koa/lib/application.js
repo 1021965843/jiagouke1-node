@@ -2,6 +2,7 @@ const http = require('http');
 const context = require('./context');
 const request = require('./request');
 const response = require('./response');
+const Stream = require('stream')
 
 class Application {
     constructor() {
@@ -22,12 +23,33 @@ class Application {
         ctx.request = request; // 上下文中包含着request
         ctx.req = ctx.request.req = req; // 默认上下文中包含着 原生的req
 
+        ctx.response = response;
+        ctx.res = ctx.response.res = res; // 这个的目的和request的含义是一致的，就是可以在我们的response对象中 通过this.res 拿到原生res
 
         return ctx;
     }
     handleRequest = (req, res) => { // 每次请求都会执行此方法
-        let ctx = this.createContext(req, res)
+        let ctx = this.createContext(req, res);
+        res.statusCode = 404;
         this.fn(ctx);
+        let _body = ctx.body;
+        if(_body){
+            if(typeof _body === 'string' || Buffer.isBuffer(_body)){
+                return res.end(_body);
+            }else if(typeof _body === 'number'){
+                return res.end(_body + '');
+            }else if(_body instanceof Stream){
+                // 可以设置成下载头 
+                //res.setHeader('Content-Type','application/octet-stream');
+                // 设置不识别的header 也会变成下载文件，设置对了才行
+                // res.setHeader('Content-Disposition','attachment;filename=FileName.txt');
+                return _body.pipe(res);
+            }else if(typeof _body == 'object'){
+                return res.end(JSON.stringify(_body));
+            }
+        }else{
+            res.end(`Not Found`)
+        }
     }
     listen(...args) {
         const server = http.createServer(this.handleRequest);
