@@ -38,14 +38,18 @@ const querystring = require('querystring')
 //     await next(); // 继续往下走
 // })
 router.get('/read', async (ctx, next) => {
+    // koa用法
     ctx.body = ctx.cookies.get('name') || 'empty'
+    // 自己封装的
     // ctx.body = ctx.req.getCookie('name') || 'empty'
     // ctx.body = ctx.req.headers['cookie'] || 'empty'
 })
 router.get('/write', async (ctx, next) => {
+    // koa用法
     ctx.cookies.set('name', 'zf', { domain: '.zf.cn' });
     ctx.cookies.set('age', '11', { httpOnly: true });
 
+    // 自己封装的
     // ctx.res.setCookie('name', 'zf', { domain: '.zf.cn' });
     // ctx.res.setCookie('age', '11', { httpOnly: true });
     // ctx.res.setHeader('Set-Cookie',['name=zf; domain=.zf.cn; max-age=10','age=11; path=/; max-age=100;httpOnly=true'])
